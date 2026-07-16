@@ -1,0 +1,556 @@
+{
+  "schema": "aerie.job-scout.config.v1",
+  "state_retention_days": 30,
+  "existing_matches_limit": 25,
+  "debug_filtered_path": null,
+  "companies": [
+    {
+      "name": "OpenAI",
+      "enabled": true,
+      "source": "greenhouse",
+      "board": "openai"
+    },
+    {
+      "name": "Anthropic",
+      "enabled": true,
+      "source": "greenhouse",
+      "board": "anthropic"
+    },
+    {
+      "name": "Perplexity",
+      "enabled": true,
+      "source": "ashby",
+      "board": "perplexity"
+    },
+    {
+      "name": "Anysphere",
+      "enabled": true,
+      "source": "ashby",
+      "board": "anysphere"
+    },
+    {
+      "name": "Harvey",
+      "enabled": true,
+      "source": "ashby",
+      "board": "harvey"
+    },
+    {
+      "name": "Glean",
+      "enabled": true,
+      "source": "greenhouse",
+      "board": "glean"
+    },
+    {
+      "name": "Sierra",
+      "enabled": true,
+      "source": "ashby",
+      "board": "sierra"
+    },
+    {
+      "name": "Cognition",
+      "enabled": true,
+      "source": "ashby",
+      "board": "cognition"
+    },
+    {
+      "name": "Decagon",
+      "enabled": true,
+      "source": "ashby",
+      "board": "decagon"
+    },
+    {
+      "name": "LangChain",
+      "enabled": true,
+      "source": "ashby",
+      "board": "langchain"
+    },
+    {
+      "name": "Scale AI",
+      "enabled": true,
+      "source": "greenhouse",
+      "board": "scaleai"
+    },
+    {
+      "name": "Ramp",
+      "enabled": true,
+      "source": "greenhouse",
+      "board": "ramp"
+    },
+    {
+      "name": "Mercury",
+      "enabled": true,
+      "source": "greenhouse",
+      "board": "mercury"
+    },
+    {
+      "name": "Brex",
+      "enabled": true,
+      "source": "greenhouse",
+      "board": "brex"
+    },
+    {
+      "name": "Stripe",
+      "enabled": false,
+      "source": "json",
+      "url": "https://stripe.com/jobs/search.json",
+      "jobs_path": [],
+      "field_map": {
+        "job_id": "id",
+        "title": "title",
+        "department": "team",
+        "location": "location",
+        "url": "url",
+        "description": "description"
+      }
+    },
+    {
+      "name": "Plaid",
+      "enabled": true,
+      "source": "greenhouse",
+      "board": "plaid"
+    },
+    {
+      "name": "Modern Treasury",
+      "enabled": true,
+      "source": "greenhouse",
+      "board": "moderntreasury"
+    },
+    {
+      "name": "Column",
+      "enabled": true,
+      "source": "greenhouse",
+      "board": "column"
+    }
+  ],
+  "criteria": {
+    "minimum_score": 1400,
+    "highlight_score": 1800,
+    "filters": [
+      {
+        "field": "salary_max",
+        "op": "gte_or_missing",
+        "value": 90000
+      },
+      {
+        "field": "title",
+        "op": "not_any_contains",
+        "value": [
+          "software engineer",
+          "backend engineer",
+          "frontend engineer",
+          "full stack engineer",
+          "data engineer",
+          "security engineer",
+          "site reliability",
+          "devops",
+          "infrastructure engineer",
+          "machine learning engineer",
+          "ml engineer",
+          "research scientist",
+          "ai engineer",
+          "designer",
+          "solutions engineer",
+          "solutions architect",
+          "sales engineer"
+        ]
+      },
+      {
+        "field": "title",
+        "op": "not_any_contains",
+        "value": [
+          "intern",
+          "new grad",
+          "account executive",
+          "sales development",
+          "business development representative",
+          "customer success manager",
+          "recruiter",
+          "legal counsel",
+          "vp,",
+          "vice president",
+          "executive",
+          "c-level",
+          "chief executive",
+          "chief operating officer",
+          "chief financial officer",
+          "accounting",
+          "controller",
+          "tax",
+          "treasury"
+        ]
+      },
+      {
+        "field": "department",
+        "op": "not_any_contains",
+        "value": ["engineering", "sales", "customer success", "legal", "people", "recruiting"]
+      }
+    ],
+    "reject_if": [
+      {
+        "label": "hybrid outside preferred hubs",
+        "all": [
+          {
+            "field": "work_mode",
+            "op": "eq",
+            "value": "hybrid"
+          },
+          {
+            "field": "location",
+            "op": "not_any_contains",
+            "value": ["san francisco", "sf", "bay area", "palo alto", "menlo park", "mountain view", "new york", "nyc", "brooklyn", "manhattan"]
+          }
+        ]
+      },
+      {
+        "label": "onsite outside preferred hubs",
+        "all": [
+          {
+            "field": "work_mode",
+            "op": "eq",
+            "value": "onsite"
+          },
+          {
+            "field": "location",
+            "op": "not_any_contains",
+            "value": ["san francisco", "sf", "bay area", "palo alto", "menlo park", "mountain view", "new york", "nyc", "brooklyn", "manhattan"]
+          }
+        ]
+      },
+      {
+        "label": "remote outside US or Canada",
+        "all": [
+          {
+            "field": "work_mode",
+            "op": "eq",
+            "value": "remote"
+          },
+          {
+            "field": "location",
+            "op": "any_contains",
+            "value": ["united kingdom", " uk", "london", "europe", "germany", "india", "singapore", "australia"]
+          }
+        ]
+      },
+      {
+        "label": "remote or unknown title outside US or Canada",
+        "all": [
+          {
+            "field": "work_mode",
+            "op": "in",
+            "value": ["remote", "unknown"]
+          },
+          {
+            "field": "title",
+            "op": "any_contains",
+            "value": ["united kingdom", " uk", "london", "europe", "germany", "india", "singapore", "australia"]
+          }
+        ]
+      }
+    ],
+    "scoring": [
+      {
+        "label": "generic product manager in title",
+        "field": "title",
+        "op": "any_contains",
+        "value": ["product manager"],
+        "score": 100
+      },
+      {
+        "label": "associate or junior product manager",
+        "field": "title",
+        "op": "any_contains",
+        "value": ["associate product manager", "junior product manager", "apm"],
+        "score": 700
+      },
+      {
+        "label": "role welcomes consulting experience",
+        "field": "description",
+        "op": "any_contains",
+        "value": ["management consulting", "strategy consulting", "consulting experience", "consultant"],
+        "score": 500
+      },
+      {
+        "label": "product strategy or operations in title",
+        "field": "title",
+        "op": "any_contains",
+        "value": ["product strategy", "product operations", "product ops"],
+        "score": 700
+      },
+      {
+        "label": "product role in department",
+        "field": "department",
+        "op": "any_contains",
+        "value": ["product", "product strategy", "product operations", "product ops"],
+        "score": 350
+      },
+      {
+        "label": "generic strategy in title",
+        "field": "title",
+        "op": "any_contains",
+        "value": ["strategy"],
+        "score": 500
+      },
+      {
+        "label": "specific strategy or bizops in title",
+        "field": "title",
+        "op": "any_contains",
+        "value": ["business operations", "bizops", "strategic operations", "product strategy", "growth strategy", "gtm strategy", "go-to-market strategy", "revenue strategy"],
+        "score": 700
+      },
+      {
+        "label": "generic strategy in department",
+        "field": "department",
+        "op": "any_contains",
+        "value": ["strategy"],
+        "score": 250
+      },
+      {
+        "label": "specific strategy or bizops in department",
+        "field": "department",
+        "op": "any_contains",
+        "value": ["business operations", "bizops", "strategic operations", "product strategy", "growth strategy", "gtm strategy", "go-to-market strategy", "revenue strategy"],
+        "score": 350
+      },
+      {
+        "label": "generic operations in title",
+        "field": "title",
+        "op": "contains",
+        "value": "operations",
+        "score": 250
+      },
+      {
+        "label": "generic operations in department",
+        "field": "department",
+        "op": "contains",
+        "value": "operations",
+        "score": 150
+      },
+      {
+        "label": "non-target operations in title",
+        "field": "title",
+        "op": "any_contains",
+        "value": ["people operations", "workplace operations", "support operations", "compliance operations"],
+        "score": -500
+      },
+      {
+        "label": "product marketing",
+        "field": "title",
+        "op": "contains",
+        "value": "product marketing",
+        "score": 250
+      },
+      {
+        "label": "growth product marketing",
+        "field": "title",
+        "op": "contains",
+        "value": "growth product marketing",
+        "score": 350
+      },
+      {
+        "label": "growth role in title",
+        "field": "title",
+        "op": "contains",
+        "value": "growth",
+        "score": 350
+      },
+      {
+        "label": "chief of staff",
+        "field": "title",
+        "op": "contains",
+        "value": "chief of staff",
+        "score": 450
+      },
+      {
+        "label": "special projects",
+        "field": "title",
+        "op": "contains",
+        "value": "special projects",
+        "score": 500
+      },
+      {
+        "label": "gtm or revenue strategy",
+        "field": "title",
+        "op": "any_contains",
+        "value": ["gtm strategy", "go-to-market strategy", "revenue strategy", "growth strategy"],
+        "score": 350
+      },
+      {
+        "label": "partnerships or ecosystem strategy",
+        "field": "title",
+        "op": "any_contains",
+        "value": ["partner operations", "partnerships strategy", "ecosystem strategy"],
+        "score": 350
+      },
+      {
+        "label": "quota or customer-facing role",
+        "field": "title",
+        "op": "any_contains",
+        "value": ["partnerships manager", "business development", "customer success"],
+        "score": -500
+      },
+      {
+        "label": "strategic finance",
+        "field": "title",
+        "op": "contains",
+        "value": "strategic finance",
+        "score": 300
+      },
+      {
+        "label": "fp&a",
+        "field": "title",
+        "op": "contains",
+        "value": "fp&a",
+        "score": -300
+      },
+      {
+        "label": "investor relations",
+        "field": "title",
+        "op": "contains",
+        "value": "investor relations",
+        "score": -400
+      },
+      {
+        "label": "ai-specific product or strategy",
+        "field": "title",
+        "op": "any_contains",
+        "value": ["ai product", "applied ai product", "llm product", "agent", "agents", "automation", "model behavior", "evals", "ai strategy"],
+        "score": 300
+      },
+      {
+        "label": "data product, strategy, or operations",
+        "field": "title",
+        "op": "any_contains",
+        "value": ["data product manager", "data strategy", "data operations"],
+        "score": 350
+      },
+      {
+        "label": "analytics or business analyst",
+        "field": "title",
+        "op": "any_contains",
+        "value": ["data analyst", "business analyst", "analytics", "business intelligence"],
+        "score": 250
+      },
+      {
+        "label": "director-level title",
+        "field": "title",
+        "op": "any_contains",
+        "value": ["director", "head of", "general manager"],
+        "score": -1800
+      },
+      {
+        "label": "senior-level title",
+        "field": "title",
+        "op": "any_contains",
+        "value": ["senior", "sr.", "sr "],
+        "score": -1400
+      },
+      {
+        "label": "lead-level title",
+        "field": "title",
+        "op": "any_contains",
+        "value": ["lead", "principal", "staff"],
+        "score": -1400
+      },
+      {
+        "label": "requires at least 4 years experience",
+        "field": "required_experience_years",
+        "op": "gte",
+        "value": 4,
+        "score": -600
+      },
+      {
+        "label": "requires at least 6 years experience",
+        "field": "required_experience_years",
+        "op": "gte",
+        "value": 6,
+        "score": -1200
+      },
+      {
+        "label": "contract employment type",
+        "field": "employment_type",
+        "op": "eq",
+        "value": "contract",
+        "score": -400
+      },
+      {
+        "label": "contract role title",
+        "field": "title",
+        "op": "contains",
+        "value": "contract",
+        "score": -400
+      },
+      {
+        "label": "salary max at least 140k",
+        "field": "salary_max",
+        "op": "gte",
+        "value": 140000,
+        "score": 250
+      },
+      {
+        "label": "salary max at least 165k",
+        "field": "salary_max",
+        "op": "gte",
+        "value": 165000,
+        "score": 350
+      },
+      {
+        "label": "salary max under 110k",
+        "field": "salary_max",
+        "op": "lt",
+        "value": 110000,
+        "score": -300
+      }
+    ],
+    "scoring_groups": [
+      {
+        "label": "location preference",
+        "rules": [
+          {
+            "label": "San Francisco or Bay Area location",
+            "field": "location",
+            "op": "any_contains",
+            "value": ["san francisco", "sf", "bay area", "palo alto", "menlo park", "mountain view"],
+            "score": 500
+          },
+          {
+            "label": "remote",
+            "field": "work_mode",
+            "op": "eq",
+            "value": "remote",
+            "score": 400
+          },
+          {
+            "label": "New York location",
+            "field": "location",
+            "op": "any_contains",
+            "value": ["new york", "nyc", "brooklyn", "manhattan"],
+            "score": 250
+          },
+          {
+            "label": "unknown location",
+            "field": "work_mode",
+            "op": "eq",
+            "value": "unknown",
+            "score": 0
+          },
+          {
+            "label": "onsite outside preferred hubs",
+            "all": [
+              {
+                "field": "work_mode",
+                "op": "eq",
+                "value": "onsite"
+              },
+              {
+                "field": "location",
+                "op": "not_any_contains",
+                "value": ["san francisco", "sf", "bay area", "palo alto", "menlo park", "mountain view", "new york", "nyc", "brooklyn", "manhattan"]
+              }
+            ],
+            "score": -700
+          }
+        ]
+      }
+    ]
+  }
+}
